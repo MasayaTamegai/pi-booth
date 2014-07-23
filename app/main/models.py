@@ -65,7 +65,7 @@ class UserDataModel(object):
 		return file
 		
 	# create a python dictionary of users by parsing the local csv file
-	# of users pulled from the intranet. This needs to happen on a thread.
+	# of users pulled from the intranet.
 	def make_user_dict(self, userfile):
 		users_dict = defaultdict(list)
 		data = open(self.userfile_path(),'r')
@@ -82,7 +82,7 @@ class UserDataModel(object):
 
 	def get_user(self, input_var):
 		# make user input lower case
-		input_var = input_var.lower()
+		input_var = input_var.lower().replace(' ','')
 		input_var_key = input_var[:1]
 		
 		# a code to indicate successful resolution of user to front end script

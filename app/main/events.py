@@ -24,7 +24,6 @@ def select_user(message):
 
 	user_input = message['data']
 	model_response = user_controller.get_user(user_input)
-
 	emit('event', { 'response': model_response['code'], 'data': model_response['guid'], 'name': model_response['name'] })
 	
 @socketio.on('restart', namespace='/photo')

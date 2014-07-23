@@ -1,8 +1,8 @@
 $(document).ready(function(){
-	
+
 	//Hold lookups in variables to save extra processing
 	var takepic = $('#takepic');
-	var usubmit = $('#usubmit');
+	var usubmit = $('#user_submit');
 	var homebutton = $('#home-button');
 	var log = $('#log');
 	var messaging = $('#messaging');
@@ -11,6 +11,7 @@ $(document).ready(function(){
 	var imagecontrols = $('#image-controls');
 	var photo = $('#photo');
 	var second = $('#second');
+
 	
 	takepic.hide();
 	
@@ -19,8 +20,8 @@ $(document).ready(function(){
 	    socket.on('event', function(msg) {
 			
 			if (msg.response == '0') {
-				
-				log.html('<p>User ' + msg.name + ' does not exist, please try again.</p>');	
+				console.log('No such user');
+				messaging.html('<p>User ' + msg.name + ' does not exist, please try again.</p>');	
 				
 			}
 		
@@ -38,7 +39,7 @@ $(document).ready(function(){
 	    
 	
 		socket.on('event', function(event) {	
-			console.log(event.type);
+			console.log(event);
 		});
 	
 	    socket.on('image', function(msg) {	
@@ -61,10 +62,7 @@ $(document).ready(function(){
 			var username = uname.val()
 			
 			if (username !== '') {
-				usubmit.off();
 				socket.emit('user', { data: uname.val() });
-				uname.hide();
-				usubmit.hide();
 				event.preventDefault();
 			}
 			else {
