@@ -1,8 +1,8 @@
 *.py[cod]
 
 # Config
-/pi-booth/config.py
-app/static/temp
+**/config
+**/temp
 
 # C extensions
 *.so
@@ -45,5 +45,4 @@ bin
 include
 local
 
-pi-booth/app/static/temp
 *.csv

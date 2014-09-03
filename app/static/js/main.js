@@ -19,13 +19,13 @@ $(document).ready(function(){
 	
 	    socket.on('event', function(msg) {
 			
-			if (msg.response == '0') {
+			if (msg.code == '0') {
 				console.log('No such user');
 				messaging.html('<p>User ' + msg.name + ' does not exist, please try again.</p>');	
 				
 			}
 		
-		else if (msg.response == '1') {
+		else if (msg.code == '1') {
 			
 			messaging.html('<p class=\"welcome\">Hello ' + msg.name + '</p><p class=\"instructions\">Click the button below to snap a photo.</p>');
 			log.html('')

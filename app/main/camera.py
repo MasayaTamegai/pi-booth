@@ -27,7 +27,7 @@ class CameraController(object):
 	def take_picture(self, filename='tempimg.jpg', width=config.imgw, height=config.imgh, user='default'):
 		self.flash_on()
 		time.sleep(0.5)
-		photo = Photo(config.imgdir, filename, user.username, config.dims, width, height, config.countdown)
+		photo = Photo(config.imgdir, filename, user, config.dims, width, height, config.countdown)
 		self.flash_off()
 		return photo
 		

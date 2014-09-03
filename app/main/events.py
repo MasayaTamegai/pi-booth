@@ -4,17 +4,12 @@ from .. import socketio
 import config
 import models, controllers, camera 
 import signal, sys, subprocess
-import window
+import twitter
 
-'''
-browser = '/usr/bin/midori'
-browser_args ='-e Fullscreen -a /home/pi/pi-booth/app/local/index.html'
-subprocess.Popen(browser+''+browser_args)
-'''
 subprocess.Popen('/usr/bin/midori -a http://localhost/local', shell=True)
 '''subprocess.Popen('/usr/bin/midori -e Fullscreen -a http://localhost/local', shell=True)'''
 camera = camera.CameraController()
-user_controller = controllers.UserController()
+t = twitter.TwitterController()
 photo_controller = controllers.PhotoController()
 
 
@@ -22,9 +17,19 @@ photo_controller = controllers.PhotoController()
 @socketio.on('user', namespace='/photo')
 def select_user(message):
 
-	user_input = message['data']
-	model_response = user_controller.get_user(user_input)
-	emit('event', { 'response': model_response['code'], 'data': model_response['guid'], 'name': model_response['name'] })
+	user_input = message['data'].replace(' ','').replace('@','')
+	
+	# twitter get fullname from username
+	# if username doesn't exist then send bad code
+	# else emit the user's first name
+	response = t.lookup(user_input)
+	if response['code'] is not 0:
+		print 'Twitter:: got user\'s name %s:' % response['name']
+		session['user'] = user_input
+		emit('event', response)
+	else:
+		print 'Twitter:: user does not exist'
+		emit('event', response)
 	
 @socketio.on('restart', namespace='/photo')
 def restart(msg):
@@ -35,7 +40,7 @@ def restart(msg):
 def take_pic(msg):
 	
 	user = session['user']
-	filename = user.first_name + "_" + user.sir_name + ".jpg"
+	filename = user + ".jpg"
 	photo = camera.take_picture(filename,user=user)
 	# start countdown display
 	session['photo'] = photo
@@ -48,9 +53,12 @@ def send_pic(message):
 
 	user = session['user']
 	photo = session['photo']
-	photo_controller.send_picture(user.guid,photo.full_path)
-	''' End user session '''
-	session.clear()
+	try:
+		t.post_photo(user,photo.full_path)
+		''' End user session '''
+		session.clear()
+	except Exception as e:
+		print e
 
 @socketio.on('connect', namespace='/local')
 def local_client_connect():

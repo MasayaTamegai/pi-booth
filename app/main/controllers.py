@@ -2,8 +2,6 @@ import config, models
 import os, subprocess, time
 from flask import session
 
-model = models.UserDataModel(config.user_file_url,config.local_cache_file,config.cache_refresh_rate)
-
 class UserController(object):
 
 	def get_user(self, user_input):
