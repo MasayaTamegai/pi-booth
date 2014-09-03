@@ -2,6 +2,7 @@
 
 # Config
 **/config
+config.py
 **/temp
 
 # C extensions

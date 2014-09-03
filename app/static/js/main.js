@@ -15,6 +15,11 @@ $(document).ready(function(){
 	
 	takepic.hide();
 	
+	
+	uname.focus(function() {
+		$('html, body').animate({ scrollTop: uname.offset().top - 60 }, 200);
+	});
+		
 	    var socket = io.connect('http://' + document.domain + ':' + location.port + '/photo');
 	
 	    socket.on('event', function(msg) {
